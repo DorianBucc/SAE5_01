@@ -4,3 +4,4 @@
 *.zip
 /data/hymenoptera_data
 /data/drinks
+__pycache__
