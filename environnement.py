@@ -1,9 +1,11 @@
 PATH = 'models/'
-MODEL = 'Model_drink1.pth'
+MODEL_PTH = 'Model_drink1'
+MODEL_PT = 'Model_drink1'
 TRAIN = False
 PATHTRAIN ='data/drinks'
 NUM_EPOCHS = 7
 NUMBERCLASS = 4
+CONVERSION = False
 
 import torch
 import os
@@ -37,3 +39,4 @@ dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 class_names = image_datasets['train'].classes
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print("Cuda disponible : " + str(torch.cuda.is_available()))

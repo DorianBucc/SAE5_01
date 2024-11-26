@@ -123,7 +123,7 @@ def Model_train(model_ft):
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
     
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=NUM_EPOCHS)
-    torch.save(model_ft.state_dict(), PATH + MODEL)
+    torch.save(model_ft.state_dict(), PATH + MODEL_PTH)
     return model_ft
 
 
@@ -206,7 +206,7 @@ def Renew_model():
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
     
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=NUM_EPOCHS)
-    torch.save(model_ft.state_dict(), PATH + MODEL)
+    torch.save(model_ft.state_dict(), PATH + MODEL_PTH + '.pth')
     return model_ft
 
 #----------------------------------------------------------------------------------------------------------------------------
@@ -215,5 +215,14 @@ def Load_model():
     model_ft = models.resnet18(weights='IMAGENET1K_V1')  # Charger ResNet18 avec poids pré-entraînés
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, NUMBERCLASS)  # Modifier la dernière couche pour correspondre à tes classes (NUMBERCLASS)
-    model_ft.load_state_dict(torch.load(PATH + MODEL))
+    model_ft.load_state_dict(torch.load(PATH + MODEL_PTH + '.pth', weights_only=True))
     return model_ft
+
+#----------------------------------------------------------------------------------------------------------------------------
+
+def conversion_pt(model,name="modele"):
+    # Charger le modèle entraîné
+    model.eval()
+
+    scripted_model = torch.jit.script(model)  # ou torch.jit.script(model)
+    scripted_model.save(PATH+name+".pt")
