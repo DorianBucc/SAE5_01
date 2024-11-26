@@ -8,6 +8,7 @@ if __name__ == '__main__':
         model = Renew_model()
     else:
         model = Load_model()
+        print(1)
         if TRAIN:
             model = Model_train(model)
         if CONVERSION:

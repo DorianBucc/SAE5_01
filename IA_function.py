@@ -43,7 +43,9 @@ def imshow(inp, title=None, numero="res"):
 
 def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
     since = time.time()
-
+    
+    # model = model.to(device)
+    
     # Create a temporary directory to save training checkpoints
     with TemporaryDirectory() as tempdir:
         best_model_params_path = os.path.join(tempdir, 'best_model_params.pt')
@@ -123,7 +125,7 @@ def Model_train(model_ft):
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
     
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=NUM_EPOCHS)
-    torch.save(model_ft.state_dict(), PATH + MODEL_PTH)
+    torch.save(model_ft.state_dict(), PATH + MODEL_PTH + ".pth")
     return model_ft
 
 
@@ -216,6 +218,7 @@ def Load_model():
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, NUMBERCLASS)  # Modifier la dernière couche pour correspondre à tes classes (NUMBERCLASS)
     model_ft.load_state_dict(torch.load(PATH + MODEL_PTH + '.pth', weights_only=True))
+    model_ft = model_ft.to(device)
     return model_ft
 
 #----------------------------------------------------------------------------------------------------------------------------
