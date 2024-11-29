@@ -228,7 +228,8 @@ def Load_model():
     model_ft = models.resnet18(weights='IMAGENET1K_V1')  # Charger ResNet18 avec poids pré-entraînés
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, NUMBERCLASS)  # Modifier la dernière couche pour correspondre à tes classes (NUMBERCLASS)
-    model_ft.load_state_dict(torch.load(PATH + MODEL_PTH + '.pth', weights_only=True))
+    device_to_map = torch.device('cpu') if not torch.cuda.is_available() else device
+    model_ft.load_state_dict(torch.load(PATH + MODEL_PTH + '.pth', weights_only=WEIGHTS_ONLY, map_location=device_to_map))
     model_ft = model_ft.to(device)
     return model_ft
 

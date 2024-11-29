@@ -7,6 +7,8 @@ NUM_EPOCHS = 28
 NUMBERCLASS = 3
 CONVERSION = True
 
+WEIGHTS_ONLY=False
+
 import torch
 import os
 from torchvision import datasets, transforms
