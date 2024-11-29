@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import torch.backends.cudnn as cudnn
+import torch.nn.functional as F
 import numpy as np
 import torchvision
 from torchvision import models
@@ -118,10 +119,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 def Model_train(model_ft):
     criterion = nn.CrossEntropyLoss()
 
-    # Observe that all parameters are being optimized
     optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 
-    # Decay LR by a factor of 0.1 every 7 epochs
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
     
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=NUM_EPOCHS)
@@ -143,14 +142,22 @@ def visualize_model(model, num_images=6, nomRes="predictions"):
             labels = labels.to(device)
 
             outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
+            
+            # Calcule les probabilités avec softmax
+            probabilities = F.softmax(outputs, dim=1)
+            top_prob, preds = torch.max(probabilities, 1)
 
             for j in range(inputs.size()[0]):
                 images_so_far += 1
-                ax = plt.subplot(num_images//2, 2, images_so_far)
+                ax = plt.subplot(num_images // 2, 2, images_so_far)
                 ax.axis('off')
-                ax.set_title(f'predicted: {class_names[preds[j]]}')
-                imshow(inputs.cpu().data[j],numero=nomRes)
+                
+                # Affiche la classe prédite et son pourcentage
+                predicted_class = class_names[preds[j]]
+                confidence = top_prob[j].item() * 100  # Convertit en pourcentage
+                ax.set_title(f'Predicted: {predicted_class} ({confidence:.2f}%)')
+                
+                imshow(inputs.cpu().data[j], numero=nomRes)
 
                 if images_so_far == num_images:
                     model.train(mode=was_training)
@@ -170,11 +177,15 @@ def visualize_model_predictions(model,img_path, nomRes="prediction"):
 
     with torch.no_grad():
         outputs = model(img)
+        probabilities = torch.nn.functional.softmax(outputs, dim=1)
+        top_prob, preds = torch.max(probabilities, 1)
         _, preds = torch.max(outputs, 1)
 
         ax = plt.subplot(2,2,1)
         ax.axis('off')
-        ax.set_title(f'Predicted: {class_names[preds[0]]}')
+        predicted_class = class_names[preds[0]]
+        probability = top_prob[0].item() * 100
+        ax.set_title(f'Predicted: {predicted_class} ({probability:.2f}%)')
         imshow(img.cpu().data[0],numero=nomRes)
         
         model.train(mode=was_training)

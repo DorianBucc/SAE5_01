@@ -1,11 +1,11 @@
 PATH = 'models/'
-MODEL_PTH = 'Model_drink1'
-MODEL_PT = 'Model_drink1'
-TRAIN = True
+MODEL_PTH = 'Model_drink2'
+MODEL_PT = 'Model_drink2'
+TRAIN = False
 PATHTRAIN ='data/drinks'
-NUM_EPOCHS = 7
-NUMBERCLASS = 4
-CONVERSION = False
+NUM_EPOCHS = 28
+NUMBERCLASS = 3
+CONVERSION = True
 
 import torch
 import os
