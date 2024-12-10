@@ -1,9 +1,9 @@
 PATH = 'models/'
-MODEL_PTH = 'Model_drink2'
-MODEL_PT = 'Model_drink2'
+MODEL_PTH = 'Model_drink3'
+MODEL_PT = 'Model_drink3'
 TRAIN = False
 PATHTRAIN ='data/drinks'
-NUM_EPOCHS = 28
+NUM_EPOCHS = 7
 NUMBERCLASS = 3
 CONVERSION = True
 
