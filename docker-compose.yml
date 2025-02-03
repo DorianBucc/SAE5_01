@@ -4,6 +4,10 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./uploads:/app/uploads
     ports:
       - "3000:3000"
+    environment:
+      - PORT=3000
 

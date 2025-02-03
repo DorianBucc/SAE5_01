@@ -1,6 +1,17 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+const upload = require('./upload'); // Import du middleware
+
+// Route POST pour uploader une image
+app.post('/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'Aucun fichier envoyé' });
+    }
+    res.json({ message: 'Image envoyée avec succès', filename: req.file.filename });
+});
+
+app.use('/uploads', express.static('uploads'));
 
 // Middleware pour servir les fichiers statiques (optionnel)
 app.use(express.static('public'));
